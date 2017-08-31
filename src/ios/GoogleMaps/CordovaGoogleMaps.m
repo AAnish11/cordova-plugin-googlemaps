@@ -158,6 +158,26 @@
         CDVViewController *cdvViewController = (CDVViewController*)self.viewController;
         NSString *mapId = [command.arguments objectAtIndex:0];
 
+        //if the user set latitude , logitude , zoom level
+        NSDictionary *userPassedCameraValues = [command.arguments objectAtIndex:1][@"camera"];
+        NSDictionary *userPassedTarget = userPassedCameraValues[@"target"];
+        NSString *userPassedZoom = userPassedTarget[@"zoom"];
+        NSString *userPassedLat = userPassedTarget[@"lat"];
+        NSString *userPassedLng = userPassedTarget[@"lng"];
+        
+        //if not passed by the user, then set to 0
+        if (userPassedLng == nil) {
+            userPassedLng = 0;
+        }
+        if (userPassedLat == nil) {
+            userPassedLat = 0;
+        }
+        if (userPassedZoom == nil) {
+            userPassedZoom = 0;
+        }
+
+
+
         // Wrapper view
         GoogleMapsViewController* mapCtrl = [[GoogleMapsViewController alloc] initWithOptions:nil];
         mapCtrl.webView = self.webView;
@@ -199,9 +219,9 @@
 
 
         // Generate an instance of GMSMapView;
-        GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:0
-                                            longitude:0
-                                            zoom:0
+        GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:[userPassedLat doubleValue]
+                                            longitude:[userPassedLng doubleValue]
+                                            zoom:[userPassedZoom doubleValue]
                                             bearing:0
                                             viewingAngle:0];
 
